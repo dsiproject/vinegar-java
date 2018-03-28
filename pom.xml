@@ -82,6 +82,7 @@
         <version>3.6.0</version>
         <configuration>
           <compilerVersion>${java.version}</compilerVersion>
+          <compilerArgument>-Xlint:unchecked</compilerArgument>
           <source>${java.version}</source>
           <target>${java.version}</target>
         </configuration>
