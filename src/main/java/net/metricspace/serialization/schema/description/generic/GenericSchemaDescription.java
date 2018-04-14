@@ -1,11 +1,11 @@
 /* Copyright (c) 2018, Eric L. McCorkle. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
+ * This code is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * only, as published by the Free Software Foundation.  This
+ * particular file is subject to the "Classpath" exception as provided
+ * in the LICENSE file that accompanied this code.
  *
  * This code is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -23,12 +23,17 @@ import net.metricspace.serialization.elements.Elements;
 import net.metricspace.serialization.schema.SchemaDescribable;
 import net.metricspace.serialization.schema.description.SchemaDescription;
 
+/**
+ * Generic interface for creating schema descriptions.
+ *
+ * @param <S> Type of schemas.
+ */
 public interface GenericSchemaDescription<S>
     extends SchemaDescription<S> {
     /**
      * Get a schema descriptor for a unitary value.
      *
-     * @param A schema descriptor for a unitary value.
+     * @return A schema descriptor for a unitary value.
      */
     public S unitDesc();
 

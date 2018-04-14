@@ -17,22 +17,9 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package net.metricspace.serialization.schema;
-
-import net.metricspace.serialization.schema.description.SchemaDescription;
 
 /**
- * Interface for things (typically {@link
- * net.metricspace.serialization.lens.Lens}es) which can generate
- * schema descriptors.
+ * Abstraction for schema description, similar in function and design
+ * to {@link net.metricspace.serialization.lens.encoding}.
  */
-public interface SchemaDescribable {
-    /**
-     * Generate a schema desciption.
-     *
-     * @param <S> Type of schema descriptors.
-     * @param desc Schema description method to use.
-     * @return The schema descriptor.
-     */
-    public <S> S schemaDesc(final SchemaDescription<S> desc);
-}
+package net.metricspace.serialization.schema.description;

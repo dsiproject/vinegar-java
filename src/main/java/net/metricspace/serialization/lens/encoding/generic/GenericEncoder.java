@@ -1,11 +1,11 @@
 /* Copyright (c) 2018, Eric L. McCorkle. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
+ * This code is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * only, as published by the Free Software Foundation.  This
+ * particular file is subject to the "Classpath" exception as provided
+ * in the LICENSE file that accompanied this code.
  *
  * This code is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -35,10 +35,9 @@ import net.metricspace.serialization.lens.Lens;
 import net.metricspace.serialization.lens.encoding.Encoder;
 
 /**
- * Common superclass for encoding schemes.  Subclasses of this provide
- * an interface for encoding and decoding data, which is used by
- * {@link net.metricspace.serialization.lens.Lens}s to actually perform
- * the encoding.
+ * An {@link Encoder} scheme based on generic datatype idioms.  This
+ * is derived loosely from ASN.1, but should be useful for almost any
+ * encoding that does not need a specific format.
  *
  * @param <C> Type of concrete (encoded) data.
  * @see net.metricspace.serialization.lens.Lens
@@ -178,7 +177,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public default <A> C encodeSeqOf(final Lens<A, C> encode,
+    public default <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                                      final A[] seq,
                                      final C concrete)
         throws IOException {
@@ -198,7 +197,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeSeqOf(final Lens<A, C> encode,
+    public <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                              final A[] seq,
                              final int offset,
                              final int len,
@@ -217,7 +216,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public default <A> C encodeSeqOf(final Lens<A, C> encode,
+    public default <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                                      final Iterable<A> it,
                                      final C concrete)
         throws IOException {
@@ -236,7 +235,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeSeqOf(final Lens<A, C> encode,
+    public <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                              final Iterator<A> it,
                              final C concrete)
         throws IOException;
@@ -253,7 +252,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeSeqOf(final Lens<A, C> encode,
+    public <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                              final Supplier<A> it,
                              final C concrete)
         throws IOException;
@@ -271,7 +270,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there aren't enough elements.
      */
-    public default <A> C encodeSeqOf(final Lens<A, C> encode,
+    public default <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                                      final int len,
                                      final A[] seq,
                                      final C concrete)
@@ -293,7 +292,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there aren't enough elements.
      */
-    public <A> C encodeSeqOf(final Lens<A, C> encode,
+    public <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                              final int len,
                              final A[] seq,
                              final int offset,
@@ -306,6 +305,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      *
      * @param <A> Type of elements.
      * @param encode {@link Lens} to use for encoding element.
+     * @param len The fixed length of the sequence.
      * @param it {@link Iterable} structure from which to encode element.
      * @param concrete The concrete representation into which to add
      *                 the encoded value.
@@ -313,7 +313,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there aren't enough elements.
      */
-    public default <A> C encodeSeqOf(final Lens<A, C> encode,
+    public default <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                                      final int len,
                                      final Iterable<A> it,
                                      final C concrete)
@@ -327,6 +327,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      *
      * @param <A> Type of elements.
      * @param encode {@link Lens} to use for encoding element.
+     * @param len The fixed length of the sequence.
      * @param it {@link Iterator} from which to encode element.
      * @param concrete The concrete representation into which to add
      *                 the encoded value.
@@ -334,7 +335,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there aren't enough elements.
      */
-    public <A> C encodeSeqOf(final Lens<A, C> encode,
+    public <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                              final int len,
                              final Iterator<A> it,
                              final C concrete)
@@ -346,6 +347,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      *
      * @param <A> Type of elements.
      * @param encode {@link Lens} to use for encoding element.
+     * @param len The fixed length of the sequence.
      * @param it {@link Supplier} from which to encode element.
      * @param concrete The concrete representation into which to add
      *                 the encoded value.
@@ -353,7 +355,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there aren't enough elements.
      */
-    public <A> C encodeSeqOf(final Lens<A, C> encode,
+    public <A> C encodeSeqOf(final Lens<A, C, ?> encode,
                              final int len,
                              final Supplier<A> it,
                              final C concrete)
@@ -371,7 +373,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there are duplicate elements.
      */
-    public <A> C encodeSetOf(final Lens<A, C> encode,
+    public <A> C encodeSetOf(final Lens<A, C, ?> encode,
                              final A[] seq,
                              final C concrete)
         throws IOException, IllegalArgumentException;
@@ -390,7 +392,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @throws IOException If an IO error occurs.
      * @throws IllegalArgumentException If there are duplicate elements.
      */
-    public <A> C encodeSetOf(final Lens<A, C> encode,
+    public <A> C encodeSetOf(final Lens<A, C, ?> encode,
                              final A[] seq,
                              final int offset,
                              final int len,
@@ -408,7 +410,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public default <A> C encodeSetOf(final Lens<A, C> encode,
+    public default <A> C encodeSetOf(final Lens<A, C, ?> encode,
                                      final Iterable<A> it,
                                      final C concrete)
         throws IOException, IllegalArgumentException {
@@ -426,7 +428,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeSetOf(final Lens<A, C> encode,
+    public <A> C encodeSetOf(final Lens<A, C, ?> encode,
                              final Iterator<A> it,
                              final C concrete)
         throws IOException, IllegalArgumentException;
@@ -442,7 +444,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeSetOf(final Lens<A, C> encode,
+    public <A> C encodeSetOf(final Lens<A, C, ?> encode,
                              final Supplier<A> it,
                              final C concrete)
         throws IOException, IllegalArgumentException;
@@ -461,7 +463,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeWithDefault(final Lens<A, C> encode,
+    public <A> C encodeWithDefault(final Lens<A, C, ?> encode,
                                    final A defval,
                                    final A val,
                                    final C concrete)
@@ -478,8 +480,8 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeOptional(final Lens<A, C> encode,
-                                final Optional<A> seq,
+    public <A> C encodeOptional(final Lens<A, C, ?> encode,
+                                final Optional<A> val,
                                 final C concrete)
         throws IOException;
 
@@ -495,8 +497,8 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeChoice(final Elements<Lens<Object, C>> elements,
-                              final Element<Lens<A, C>> kind,
+    public <A> C encodeChoice(final Elements<Lens<Object, C, ?>> elements,
+                              final Element<Lens<A, C, ?>> kind,
                               final A val,
                               final C concrete)
         throws IOException;
@@ -512,7 +514,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeStructure(final Elements<Lens<Object, C>> elems,
+    public <A> C encodeStructure(final Elements<Lens<Object, C, ?>> elems,
                                  final A val,
                                  final C concrete)
         throws IOException;
@@ -528,7 +530,7 @@ public interface GenericEncoder<C> extends Encoder<C> {
      * @return The modified concrete representation.
      * @throws IOException If an IO error occurs.
      */
-    public <A> C encodeSet(final Elements<Lens<Optional<Object>, C>> elems,
+    public <A> C encodeSet(final Elements<Lens<Optional<Object>, C, ?>> elems,
                            final A val,
                            final C concrete)
         throws IOException;

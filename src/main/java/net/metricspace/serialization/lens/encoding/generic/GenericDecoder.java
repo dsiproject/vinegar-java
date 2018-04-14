@@ -1,11 +1,11 @@
 /* Copyright (c) 2018, Eric L. McCorkle. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * This code is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License version 2 only, as
- * published by the Free Software Foundation.  Oracle designates this
- * particular file as subject to the "Classpath" exception as provided
- * by Oracle in the LICENSE file that accompanied this code.
+ * This code is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2
+ * only, as published by the Free Software Foundation.  This
+ * particular file is subject to the "Classpath" exception as provided
+ * in the LICENSE file that accompanied this code.
  *
  * This code is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
@@ -17,7 +17,7 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package net.metricspace.serialization.lens.encoding;
+package net.metricspace.serialization.lens.encoding.generic;
 
 import java.io.IOException;
 import java.lang.Iterable;
@@ -34,10 +34,9 @@ import net.metricspace.serialization.lens.Lens;
 import net.metricspace.serialization.lens.encoding.Decoder;
 
 /**
- * Common superclass for encoding schemes.  Subclasses of this provide
- * an interface for encoding and decoding data, which is used by
- * {@link net.metricspace.serialization.lens.Lens}s to actually perform
- * the encoding.
+ * A {@link Decoder} scheme based on generic datatype idioms.  This
+ * is derived loosely from ASN.1, but should be useful for almost any
+ * encoding that does not need a specific format.
  *
  * @param <C> Type of concrete (encoded) data.
  * @see net.metricspace.serialization.lens.Lens
@@ -141,10 +140,10 @@ public interface GenericDecoder<C> extends Decoder<C> {
      *                                  describe a variable length
      *                                  bytestring.
      */
-    public <A> A[] decodeSeqOf(final Consumer<Integer> lenfun,
-                               final Consumer<A> elemfun,
-                               final Lens<A, C> decode,
-                               final C concrete)
+    public <A> void decodeSeqOf(final Consumer<Integer> lenfun,
+                                final Consumer<A> elemfun,
+                                final Lens<A, ?, C> decode,
+                                final C concrete)
         throws IOException, IllegalArgumentException;
 
     /**
@@ -161,10 +160,10 @@ public interface GenericDecoder<C> extends Decoder<C> {
      *                                  describe a variable length
      *                                  bytestring.
      */
-    public <A> A[] decodeSeqOf(final int len,
-                               final Consumer<A> elemfun,
-                               final Lens<A, C> decode,
-                               final C concrete)
+    public <A> void decodeSeqOf(final int len,
+                                final Consumer<A> elemfun,
+                                final Lens<A, ?, C> decode,
+                                final C concrete)
         throws IOException, IllegalArgumentException;
 
     /**
@@ -181,10 +180,10 @@ public interface GenericDecoder<C> extends Decoder<C> {
      * @throws IllegalArgumentException If the content does not
      *                                  describe a uniform set.
      */
-    public <A> A[] decodeSetOf(final Consumer<Integer> lenfun,
-                               final Consumer<A> elemfun,
-                               final Lens<A, C> decode,
-                               final C concrete)
+    public <A> void decodeSetOf(final Consumer<Integer> lenfun,
+                                final Consumer<A> elemfun,
+                                final Lens<A, ?, C> decode,
+                                final C concrete)
         throws IOException, IllegalArgumentException;
 
 
@@ -198,7 +197,7 @@ public interface GenericDecoder<C> extends Decoder<C> {
      * @return The decoded value.
      * @throws IOException If an IO error occurs.
      */
-    public <A> A decodeWithDefault(final Lens<A, C> decode,
+    public <A> A decodeWithDefault(final Lens<A, ?, C> decode,
                                    final A defval,
                                    final C concrete)
         throws IOException;
@@ -214,7 +213,7 @@ public interface GenericDecoder<C> extends Decoder<C> {
      * @throws IllegalArgumentException If the content does not
      *                                  describe an optional value.
      */
-    public <A> Optional<A> decodeOptional(final Lens<A, C> decode,
+    public <A> Optional<A> decodeOptional(final Lens<A, ?, C> decode,
                                           final C concrete)
         throws IOException, IllegalArgumentException;
 
@@ -229,7 +228,7 @@ public interface GenericDecoder<C> extends Decoder<C> {
      * @throws IllegalArgumentException If the content does not
      *                                  describe an optional value.
      */
-    public <A> A decodeChoice(final Elements<Lens<A, C>> elems,
+    public <A> A decodeChoice(final Elements<Lens<A, ?, C>> elems,
                               final C concrete)
         throws IOException, IllegalArgumentException;
 
@@ -244,7 +243,7 @@ public interface GenericDecoder<C> extends Decoder<C> {
      * @throws IllegalArgumentException If the content does not
      *                                  describe a structure value.
      */
-    public <A> A decodeStructure(final Elements<Lens<Object, C>> elems,
+    public <A> A decodeStructure(final Elements<Lens<Object, ?, C>> elems,
                                  final C concrete)
         throws IOException, IllegalArgumentException;
 
@@ -259,7 +258,7 @@ public interface GenericDecoder<C> extends Decoder<C> {
      * @throws IllegalArgumentException If the content does not
      *                                  describe a non-uniform set.
      */
-    public <A> C decodeSet(final Elements<Lens<Optional<Object>, C>> elems,
+    public <A> C decodeSet(final Elements<Lens<Optional<Object>, ?, C>> elems,
                            final C concrete)
         throws IOException, IllegalArgumentException;
 }
