@@ -43,9 +43,9 @@ public interface ValuePickler<A, C> extends Lens<A, C, C> {
      * @throws IOException If an exception occurs during encoding.
      */
     @Override
-    public C encode(final Encoder<C> encoding,
-                    final A data,
-                    final C concrete)
+    public default C encode(final Encoder<C> encoding,
+                            final A data,
+                            final C concrete)
         throws IOException {
         return encode(encoding, data);
     }
